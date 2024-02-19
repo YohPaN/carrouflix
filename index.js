@@ -18,6 +18,7 @@ class Carouflix {
     slider = "";
     globalArray = [];
     maxLeftOffset = 0;
+    pending = false;
 
     constructor(dataSet, config) {
         this.config = config;
@@ -97,26 +98,31 @@ class Carouflix {
     }
 
     goTo(leftOrRight) {
-        //determine le sens
-        let stepFunction = this.config.imageStep
-        if(leftOrRight === 'right') {
-            stepFunction = this.config.imageStep * -this.imageWidth
-        } else if(leftOrRight === 'left') {
-            stepFunction = this.config.imageStep * this.imageWidth
-        }
+        if(!this.pending) {
+            this.pending = true;
+            //determine le sens
+            let stepFunction = this.config.imageStep
+            if(leftOrRight === 'right') {
+                stepFunction = this.config.imageStep * -this.imageWidth
+            } else if(leftOrRight === 'left') {
+                stepFunction = this.config.imageStep * this.imageWidth
+            }
 
-        Promise.all([this.setSrcToImg(leftOrRight), this.setNewLeftOffset(stepFunction)]).then(() => {
-                this.slideImages(leftOrRight).then(() => {
-                    this.unsetSrcImages(leftOrRight);
-                    if(leftOrRight === 'right') {
-                        this.sliderCounterStart = (this.sliderCounterStart + this.config.imageStep) % this.globalArray.length;
-                        this.sliderCounterEnd = (this.sliderCounterEnd + this.config.imageStep) % this.globalArray.length;
-                    } else if(leftOrRight === 'left') {
-                        this.sliderCounterStart = (this.sliderCounterStart - this.config.imageStep + this.globalArray.length) % this.globalArray.length;
-                        this.sliderCounterEnd = (this.sliderCounterEnd - this.config.imageStep + this.globalArray.length) % this.globalArray.length;
-                    }
-                });
-            });
+            Promise.all([this.setSrcToImg(leftOrRight), this.setNewLeftOffset(stepFunction)]).then(() => {
+                    this.slideImages(leftOrRight).then(() => {
+                        this.unsetSrcImages(leftOrRight).then(() => {
+                            this.pending = false;
+                        });
+                        if(leftOrRight === 'right') {
+                            this.sliderCounterStart = (this.sliderCounterStart + this.config.imageStep) % this.globalArray.length;
+                            this.sliderCounterEnd = (this.sliderCounterEnd + this.config.imageStep) % this.globalArray.length;
+                        } else if(leftOrRight === 'left') {
+                            this.sliderCounterStart = (this.sliderCounterStart - this.config.imageStep + this.globalArray.length) % this.globalArray.length;
+                            this.sliderCounterEnd = (this.sliderCounterEnd - this.config.imageStep + this.globalArray.length) % this.globalArray.length;
+                        }
+                    });
+                })
+        }
             
     }
 
@@ -163,18 +169,22 @@ class Carouflix {
     }
 
     unsetSrcImages(leftOrRight) {
-        for (let index = 0; index < this.config.imageStep; index++) {
-            if(leftOrRight === 'right') {
-                const myIndex = (this.sliderCounterStart + index) % this.globalArray.length;
-                this.globalArray[myIndex].htmlElement.src = "";
-                this.globalArray[myIndex].arrayKey = null;    
-            } else if(leftOrRight === 'left') {
-                const myIndex = (this.sliderCounterEnd - index + this.globalArray.length) % this.globalArray.length;
-                this.globalArray[myIndex].htmlElement.src = "";
-                this.globalArray[myIndex].arrayKey = null; 
+        return new Promise((resolve) => {
+
+            for (let index = 0; index < this.config.imageStep; index++) {
+                if(leftOrRight === 'right') {
+                    const myIndex = (this.sliderCounterStart + index) % this.globalArray.length;
+                    this.globalArray[myIndex].htmlElement.src = "";
+                    this.globalArray[myIndex].arrayKey = null;    
+                } else if(leftOrRight === 'left') {
+                    const myIndex = (this.sliderCounterEnd - index + this.globalArray.length) % this.globalArray.length;
+                    this.globalArray[myIndex].htmlElement.src = "";
+                    this.globalArray[myIndex].arrayKey = null; 
+                }
             }
+            resolve();
+        })
         }
-    }
 }
 
 export default Carouflix;

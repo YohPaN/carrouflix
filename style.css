@@ -1,57 +1,51 @@
 
-.container {
+.carouflix {
     overflow: hidden;
-    padding: 3px;
-    margin: auto;
-    border: 1px solid red;
-    width: 30vw;
-    height: 15vh;
     position: relative;
+    background-color: var(--carouflix-background-color);
+}
+
+.arrow {
+    position: absolute;
+    top: 50%;
+    transform: translate(0%, -50%);
+    height: 30px;
+    width: 30px;
+    z-index: 11;
+    border: none;
+    background-color: transparent;
+    background-repeat: no-repeat;
+    background-size: contain;
 }
 
 #left-arrow {
     left: 0;
-    position: absolute;
-    top: 50%;
-    height: 30px;
-    width: 30px;
-    z-index: 11;
-    background-color: black;
-    background-repeat: no-repeat;
-    background-size: contain;
     background-image: url('assets/left_arrow.png');
 }
 
 #right-arrow {
     right: 0;
-    position: absolute;
-    top: 50%;
-    height: 30px;
-    width: 30px;
-    z-index: 11;
-    background-color: black;
-    background-repeat: no-repeat;
-    background-size: contain;
     background-image: url('assets/right_arrow.png');
 }
 
 .slider {
     position: relative;
-    left: -30vw;
-    display: flex;
-    flex-direction: row;
-    border: 1px solid blue;
-    width: 120vw;
+    left: var(--slider-left);
+    width: var(--slider-width);
     height: 100%;
 }
 
 .item {
-    width: 9vw;
+    width: var(--item-width);
     max-height: 100%;
     position: absolute;
     transition: left var(--transition-time), right var(--transition-time) ;
 }
 
 :root {
-    --transition-time: 0.5s
+    --transition-time: 0.5s;
+    --item-width: 9vw;
+    --slider-width: 100vw;
+    --slider-left: 30vw;
+    --carouflix-background-color: transparent;
 }

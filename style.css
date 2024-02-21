@@ -3,29 +3,30 @@
     overflow: hidden;
     position: relative;
     background-color: var(--carouflix-background-color);
+    padding-top: 5px;
+    padding-bottom: 5px;
 }
 
 .arrow {
     position: absolute;
-    top: 50%;
-    transform: translate(0%, -50%);
-    height: 30px;
-    width: 30px;
+    height: 100%;
+    width: var(--arrow-size);
     z-index: 11;
     border: none;
+    padding: 0;
     background-color: transparent;
-    background-repeat: no-repeat;
-    background-size: contain;
+
+    & img {
+        width: 100%;
+    }
 }
 
 #left-arrow {
     left: 0;
-    background-image: url('assets/left_arrow.png');
 }
 
 #right-arrow {
     right: 0;
-    background-image: url('assets/right_arrow.png');
 }
 
 .slider {
@@ -37,9 +38,22 @@
 
 .item {
     width: var(--item-width);
-    max-height: 100%;
+    height: 100%;
     position: absolute;
-    transition: left var(--transition-time), right var(--transition-time) ;
+    transition: left var(--transition-time), right var(--transition-time);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    & a {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    & img {
+        max-height: 100%;
+        max-width: 90%;
+    }
 }
 
 :root {
@@ -48,4 +62,5 @@
     --slider-width: 100vw;
     --slider-left: 30vw;
     --carouflix-background-color: transparent;
+    --arrow-size: 30px;
 }

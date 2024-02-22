@@ -22,8 +22,10 @@ A JavaScript package that provides a fluent infinite slider/carousel. When you r
 ## Integration
 * Import Carouflix:
 `import Carouflix from 'carouflix'`
-* Add a `<div>` element in your DOM with the class name "carouflix". This  will determine the slider dimensions:
-`<div class="carouflix"></div>`
+* Add a `<div>` element in your DOM with the class name "carouflix". The parent node in your DOM will determine the slider dimensions:
+```html
+<div class="carouflix"></div>
+```
 * Define a new instance of Carouflix:
 `new Carouflix(...)`
 * Provide an array of image paths and a config object according to the documentation
@@ -114,7 +116,7 @@ Let you choose your logo for navigation toggle if false. Then, with CSS selector
 Choose between three navigation toggle sizes: sm, md, xl.
 
 - **color:**  
-If you use the default navigation toggle, you can choose between "black" or "white" color.
+If you use the default navigation toggle, you can choose the color.
 
 
 Here is the config object structure and default values:
@@ -137,7 +139,7 @@ const config = {
 ```
 
 ## Styling
-As mentioned in [Integration](#integration) part, the `div` with the class name "carouflix" will determine the width and height of the slider.
+As mentioned in [Integration](#integration) part, the parent node of the `div` with the class name "carouflix" will determine the width and height of the slider.
 By default, each picture will take 100% of the height of the slider.
 
 ### CSS values

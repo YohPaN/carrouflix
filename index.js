@@ -1,10 +1,5 @@
 import './style.css';
 
-import right_navigation_toggle from './assets/right_arrow.png'
-import left_navigation_toggle from './assets/left_arrow.png'
-import right_navigation_toggle_black from './assets/right_arrow_black.png'
-import left_navigation_toggle_black from './assets/left_arrow_black.png'
-
 class Carouflix {
     config = {
         setup: {
@@ -56,11 +51,6 @@ class Carouflix {
         this.maxLeftOffset = this.imageWidth * Math.max(this.imageDisplayedPlusImageStep + this.config.setup.imageStep, this.config.setup.imageDisplayed * 3);
         this.pxToVw = document.documentElement.clientWidth / 100;
 
-        //evite d'avoir un image displayed superieur au nb d'image
-        if(this.config.setup.imageDisplayed > this.dataSet.length) {
-            throw new Error("The number of image displayed can't be superior to the data set.")
-        }
-
         this.initialization(container);
     }
 
@@ -79,6 +69,7 @@ class Carouflix {
         root.style.setProperty('--slider-width', (Math.max(this.imageDisplayedPlusImageStep + this.config.setup.imageStep, this.config.setup.imageDisplayed * 3) * this.imageWidth) / this.pxToVw + 'vw');
         root.style.setProperty('--slider-left', Math.min(this.config.setup.imageStep * this.imageWidth * -1, this.config.setup.imageDisplayed * this.imageWidth * -1)  / this.pxToVw + 'vw');
         root.style.setProperty('--carouflix-background-color', this.config.style.backgroundColor);
+        root.style.setProperty('--color', this.config.style.color);
 
         switch (this.config.style.navigationToggleSize) {
             case 'sm':
@@ -122,22 +113,28 @@ class Carouflix {
         if (dataSet.some(element => typeof element !== 'string')) {
             throw new TypeError("dataSet values must be strings");
         }
-        
-        if(config.setup.aWraper) {
-            if(dataSetHref === undefined) {
-                throw new Error("dataSetHref must be set if config.setup.aWraper is true");
+        if(config.setup.hasOwnProperty('aWraper')) {
+            if(config.setup.aWraper) {
+                if(dataSetHref === undefined) {
+                    throw new Error("dataSetHref must be set if config.setup.aWraper is true");
+                }
+                if(!Array.isArray(dataSetHref)) {
+                    throw new TypeError("dataSetHref must be an array");
+                }
+                if(dataSetHref.length < 1) {
+                    throw new RangeError("dataSetHref must contain at least one element");
+                }
+                if (dataSetHref.some(element => typeof element !== 'string')) {
+                    throw new TypeError("dataSetHref values must be strings");
+                }
+                if (dataSetHref.length != dataSet.length) {
+                    throw new TypeError("dataSetHref must have the same length as dataSet");
+                }
             }
-            if(!Array.isArray(dataSetHref)) {
-                throw new TypeError("dataSetHref must be an array");
-            }
-            if(dataSetHref.length < 1) {
-                throw new RangeError("dataSetHref must contain at least one element");
-            }
-            if (dataSetHref.some(element => typeof element !== 'string')) {
-                throw new TypeError("dataSetHref values must be strings");
-            }
-            if (dataSetHref.length != dataSet.length) {
-                throw new TypeError("dataSetHref must have the same length as dataSet");
+        }
+        if(config.setup.hasOwnProperty('imageDisplayed')) {
+            if(config.setup.imageDisplayed > dataSet.length) {
+                throw new Error("The number of image displayed can't be superior to dataSet.")
             }
         }
         
@@ -160,7 +157,9 @@ class Carouflix {
      * @param {Object} subConfig 
      */
     configValidationSwitch(subConfig) {
-        const s = new Option().style;
+        const backgroundColor = new Option().style;
+        const color = new Option().style;
+
 
         for(let setup in subConfig) {
             switch (setup) {
@@ -196,9 +195,15 @@ class Carouflix {
                     }
                     break;
                 case 'backgroundColor':
-                    s.color = subConfig['backgroundColor'];
-                    if(s.color === "") {
+                    backgroundColor.color = subConfig['backgroundColor'];
+                    if(backgroundColor.color === "") {
                         throw new Error('config.style.backgroundColor must be a valid CSS <color>');
+                    }
+                    break;
+                case 'color':
+                    color.color = subConfig['color'];
+                    if(color.color === "") {
+                        throw new Error('config.style.color must be a valid CSS <color>');
                     }
                     break;
                 case 'useDefaultnavigationToggle':
@@ -209,11 +214,6 @@ class Carouflix {
                 case 'navigationToggleSize':
                     if(!['sm', 'md', 'xl'].includes(subConfig['navigationToggleSize'])) {
                         throw new Error('config.style.navigationToggleSize must be a "sm", "md" or "xl"');
-                    }
-                    break;
-                case 'color':
-                    if(!['white', 'black'].includes(subConfig['color'])) {
-                        throw new Error('config.style.color must be "white" or "black"');
                     }
                     break;
                 default:
@@ -249,13 +249,6 @@ class Carouflix {
      */
     navigationToggleButtonFactory(direction) {
         const listnerValue = direction === 'left' ? -1 : 1;
-        let importImage = null;
-
-        if(this.config.style.color === 'white') {
-            importImage = direction === 'left' ? left_arrow : right_arrow;
-        } else if(this.config.style.color === 'black') {
-            importImage = direction === 'left' ? left_arrow_black : right_arrow_black;
-        }
 
         const button = document.createElement('button');
         button.setAttribute('id', `${direction}-navigation-toggle`);
@@ -263,12 +256,6 @@ class Carouflix {
         button.addEventListener('click', () => {
             this.goTo(listnerValue)
         });
-
-        if(this.config.style.useDefaultnavigationToggle) {
-            const navigationToggle = document.createElement("img");
-            navigationToggle.src = importImage;
-            button.append(navigationToggle);
-        }
 
         return button;
     }

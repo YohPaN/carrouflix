@@ -7,10 +7,10 @@
     padding-bottom: 5px;
 }
 
-.arrow {
+.navigation-toggle {
     position: absolute;
     height: 100%;
-    width: var(--arrow-size);
+    width: var(--navigation-toggle-size);
     z-index: 11;
     border: none;
     padding: 0;
@@ -21,11 +21,11 @@
     }
 }
 
-#left-arrow {
+#left-navigation-toggle {
     left: 0;
 }
 
-#right-arrow {
+#right-navigation-toggle {
     right: 0;
 }
 
@@ -63,5 +63,5 @@
     --slider-width: 100vw;
     --slider-left: 30vw;
     --carouflix-background-color: transparent;
-    --arrow-size: 30px;
+    --navigation-toggle-size: 30px;
 }

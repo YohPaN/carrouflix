@@ -1,9 +1,9 @@
 import './style.css';
 
-import right_arrow from './assets/right_arrow.png'
-import left_arrow from './assets/left_arrow.png'
-import right_arrow_black from './assets/right_arrow_black.png'
-import left_arrow_black from './assets/left_arrow_black.png'
+import right_navigation_toggle from './assets/right_arrow.png'
+import left_navigation_toggle from './assets/left_arrow.png'
+import right_navigation_toggle_black from './assets/right_arrow_black.png'
+import left_navigation_toggle_black from './assets/left_arrow_black.png'
 
 class Carouflix {
     config = {
@@ -16,8 +16,8 @@ class Carouflix {
         },
         style: {
             backgroundColor: 'transparent',
-            useDefaultArrow: true,
-            arrowSize: 'md',
+            useDefaultnavigationToggle: true,
+            navigationToggleSize: 'md',
             color: 'white',
         },
     }
@@ -80,15 +80,15 @@ class Carouflix {
         root.style.setProperty('--slider-left', Math.min(this.config.setup.imageStep * this.imageWidth * -1, this.config.setup.imageDisplayed * this.imageWidth * -1)  / this.pxToVw + 'vw');
         root.style.setProperty('--carouflix-background-color', this.config.style.backgroundColor);
 
-        switch (this.config.style.arrowSize) {
+        switch (this.config.style.navigationToggleSize) {
             case 'sm':
-                root.style.setProperty('--arrow-size', 20 + 'px');
+                root.style.setProperty('--navigation-toggle-size', 20 + 'px');
                 break;
             case 'md':
-                root.style.setProperty('--arrow-size', 50 + 'px');
+                root.style.setProperty('--navigation-toggle-size', 50 + 'px');
                 break;
             case 'xl':
-                root.style.setProperty('--arrow-size', 100 + 'px');
+                root.style.setProperty('--navigation-toggle-size', 100 + 'px');
                 break;
         }
 
@@ -201,14 +201,14 @@ class Carouflix {
                         throw new Error('config.style.backgroundColor must be a valid CSS <color>');
                     }
                     break;
-                case 'useDefaultArrow':
-                    if(typeof subConfig['useDefaultArrow'] != 'boolean') {
-                        throw new TypeError('config.style.useDefaultArrow must be a Boolean');
+                case 'useDefaultnavigationToggle':
+                    if(typeof subConfig['useDefaultnavigationToggle'] != 'boolean') {
+                        throw new TypeError('config.style.useDefaultnavigationToggle must be a Boolean');
                     }
                     break;
-                case 'arrowSize':
-                    if(!['sm', 'md', 'xl'].includes(subConfig['arrowSize'])) {
-                        throw new Error('config.style.arrowSize must be a "sm", "md" or "xl"');
+                case 'navigationToggleSize':
+                    if(!['sm', 'md', 'xl'].includes(subConfig['navigationToggleSize'])) {
+                        throw new Error('config.style.navigationToggleSize must be a "sm", "md" or "xl"');
                     }
                     break;
                 case 'color':
@@ -229,8 +229,8 @@ class Carouflix {
      */
     domCreation(container) {
         //button
-        const leftButton = this.arrowButtonFactory('left');
-        const rightButton = this.arrowButtonFactory('right');
+        const leftButton = this.navigationToggleButtonFactory('left');
+        const rightButton = this.navigationToggleButtonFactory('right');
 
         //slider
         this.slider = document.createElement("div");
@@ -243,11 +243,11 @@ class Carouflix {
     }
 
     /**Factory to build buttons to navigate into the slider
-     * @function arrowButtonFactory
+     * @function navigationToggleButtonFactory
      * @param {String} direction
      * @returns {HTMLButtonElement} 
      */
-    arrowButtonFactory(direction) {
+    navigationToggleButtonFactory(direction) {
         const listnerValue = direction === 'left' ? -1 : 1;
         let importImage = null;
 
@@ -258,16 +258,16 @@ class Carouflix {
         }
 
         const button = document.createElement('button');
-        button.setAttribute('id', `${direction}-arrow`);
-        button.setAttribute('class', 'arrow');
+        button.setAttribute('id', `${direction}-navigation-toggle`);
+        button.setAttribute('class', 'navigation-toggle');
         button.addEventListener('click', () => {
             this.goTo(listnerValue)
         });
 
-        if(this.config.style.useDefaultArrow) {
-            const arrow = document.createElement("img");
-            arrow.src = importImage;
-            button.append(arrow);
+        if(this.config.style.useDefaultnavigationToggle) {
+            const navigationToggle = document.createElement("img");
+            navigationToggle.src = importImage;
+            button.append(navigationToggle);
         }
 
         return button;

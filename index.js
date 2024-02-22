@@ -40,8 +40,8 @@ class Carouflix {
      * @param {Object} config 
      */
     constructor(dataSet, config, dataSetHref) {
-        this.inputValidation(dataSet, config, dataSetHref);
         const container = document.getElementsByClassName('carouflix')[0];
+        this.inputValidation(dataSet, config, dataSetHref, container);
 
         this.config.setup = {...this.config.setup, ...config.setup};
         this.config.style = {...this.config.style, ...config.style};
@@ -99,11 +99,17 @@ class Carouflix {
      * @function
      * @param {Object} config
      * @param {Array} dataSet  
+     * @param {Array} dataSetHref
+     * @param {HTMLElement} container  
      */
-    inputValidation(dataSet, config, dataSetHref) {
+    inputValidation(dataSet, config, dataSetHref, container) {
+
+        if(container === undefined) {
+            throw new Error('You need to define a "div" element with the class name "carouflix" and wait for the DOM was fully load')
+        }
 
         if(config === undefined) {
-            throw new Error('dataSet is required and config is required as well, even if it\'s an empty object')
+            throw new Error('You need to provide an array of image paths and a config object, even if config object is empty')
         }
         if(!Array.isArray(dataSet)) {
             throw new TypeError("dataSet must be an array");
@@ -118,9 +124,8 @@ class Carouflix {
         }
         
         if(config.setup.aWraper) {
-            console.log("test")
             if(dataSetHref === undefined) {
-                throw new Error("dataSetHref must be set if aWraper is true");
+                throw new Error("dataSetHref must be set if config.setup.aWraper is true");
             }
             if(!Array.isArray(dataSetHref)) {
                 throw new TypeError("dataSetHref must be an array");
@@ -161,54 +166,54 @@ class Carouflix {
             switch (setup) {
                 case 'imageStep':
                     if(typeof subConfig['imageStep'] != 'number') {
-                        throw new TypeError('imageStep must be a Number');
+                        throw new TypeError('config.setup.imageStep must be a Number');
                     } else if(subConfig['imageStep'] < 1) {
-                        throw new Error('imageStep must be greater than one');
+                        throw new Error('config.setup.imageStep must be greater than one');
                     }
                     break;
                 case 'transitionTime':
                     if(typeof subConfig['transitionTime'] != 'number') {
-                        throw new TypeError('transitionTime must be a Number');
+                        throw new TypeError('config.setup.transitionTime must be a Number');
                     } else if(subConfig['transitionTime'] <= 0) {
-                        throw new Error('transitionTime must be greater than zero');
+                        throw new Error('config.setup.transitionTime must be greater than zero');
                     }
                     break;
                 case 'imageDisplayed':
                     if(typeof subConfig['imageDisplayed'] != 'number') {
-                        throw new TypeError('imageDisplayed must be a Number');
+                        throw new TypeError('config.setup.imageDisplayed must be a Number');
                     } else if(subConfig['imageDisplayed'] < 1) {
-                        throw new RangeError('imageDisplayed must be greater than one');
+                        throw new RangeError('config.setup.imageDisplayed must be greater than one');
                     }
                     break;
                 case 'stopOnLastPicture':
                     if(typeof subConfig['stopOnLastPicture'] != 'boolean') {
-                        throw new TypeError('stopOnLastPicture must be a Boolean');
+                        throw new TypeError('config.setup.stopOnLastPicture must be a Boolean');
+                    }
+                    break;
+                case 'aWraper':
+                    if(typeof subConfig['aWraper'] != 'boolean') {
+                        throw new TypeError('config.setup.aWraper must be a Boolean');
                     }
                     break;
                 case 'backgroundColor':
                     s.color = subConfig['backgroundColor'];
                     if(s.color === "") {
-                        throw new Error('backgroundColor must be a valid CSS <color>');
+                        throw new Error('config.style.backgroundColor must be a valid CSS <color>');
                     }
                     break;
                 case 'useDefaultArrow':
                     if(typeof subConfig['useDefaultArrow'] != 'boolean') {
-                        throw new TypeError('useDefaultArrow must be a Boolean');
+                        throw new TypeError('config.style.useDefaultArrow must be a Boolean');
                     }
                     break;
                 case 'arrowSize':
                     if(!['sm', 'md', 'xl'].includes(subConfig['arrowSize'])) {
-                        throw new Error('arrowSize must be a "sm", "md" or "xl"');
+                        throw new Error('config.style.arrowSize must be a "sm", "md" or "xl"');
                     }
                     break;
                 case 'color':
                     if(!['white', 'black'].includes(subConfig['color'])) {
-                        throw new Error('color must be "white" or "black"');
-                    }
-                    break;
-                case 'aWraper':
-                    if(typeof subConfig['aWraper'] != 'boolean') {
-                        throw new TypeError('aWraper must be a Boolean');
+                        throw new Error('config.style.color must be "white" or "black"');
                     }
                     break;
                 default:
@@ -317,7 +322,7 @@ class Carouflix {
     settingUpGlobalArray(index, htmlElements, leftOffset, arrayKey, src, href) {
         this.globalArray[index] = {htmlElement: htmlElements[0], htmlImage: htmlElements[1], htmlA: htmlElements[2], leftOffset: leftOffset, arrayKey: arrayKey};
         this.globalArray[index].htmlImage.src = src;
-        this.globalArray[index].htmlA.href = href;
+        this.config.setup.aWraper ? this.globalArray[index].htmlA.href = href : null;
     }
 
     /**Factory for img element creation
@@ -395,12 +400,12 @@ class Carouflix {
                 
                 if(arrayKey !== 0 || !this.config.setup.stopOnLastPicture || this.config.setup.imageStep === 1) {
                     this.globalArray[globalArrayIndex].htmlImage.src = this.dataSet[arrayKey];
-                    this.globalArray[globalArrayIndex].htmlA.href = this.dataSetHref[arrayKey];
+                    this.config.setup.aWraper ? this.globalArray[globalArrayIndex].htmlA.href = this.dataSetHref[arrayKey] : null;
 
                     this.globalArray[globalArrayIndex].arrayKey = arrayKey;
                 } else if(arrayKey === 0 && index === 0) {
                     this.globalArray[globalArrayIndex].htmlImage.src = this.dataSet[arrayKey];
-                    this.globalArray[globalArrayIndex].htmlA.href = this.dataSetHref[arrayKey];
+                    this.config.setup.aWraper ? this.globalArray[globalArrayIndex].htmlA.href = this.dataSetHref[arrayKey] : null;
 
                     this.globalArray[globalArrayIndex].arrayKey = arrayKey;
                     offsetRight = -(this.config.setup.imageDisplayed - this.config.setup.imageStep) * direction;
@@ -409,7 +414,7 @@ class Carouflix {
                     break;
                 } else {
                     this.globalArray[globalArrayIndex].htmlImage.src = this.dataSet[arrayKey];
-                    this.globalArray[globalArrayIndex].htmlA.href = this.dataSetHref[arrayKey];
+                    this.config.setup.aWraper ? this.globalArray[globalArrayIndex].htmlA.href = this.dataSetHref[arrayKey] : null;
 
                     this.globalArray[globalArrayIndex].arrayKey = arrayKey;
                     offsetRight = this.config.setup.imageStep - index - 1;
@@ -470,7 +475,7 @@ class Carouflix {
             for (let index = 0; index < this.config.setup.imageStep + offsetRight; index++) {
                 const myIndex = this.strictModulo(counterUsed + index * direction, this.globalArray.length);
                 this.globalArray[myIndex].htmlImage.src = "";
-                this.globalArray[myIndex].htmlA.href = "";
+                this.config.setup.aWraper ? this.globalArray[myIndex].htmlA.href = "" : null;
                 this.globalArray[myIndex].arrayKey = null;  
             }
             resolve();

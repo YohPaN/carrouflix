@@ -43,6 +43,11 @@ let [loading, setLoading] = useState(true)
 
 ## Code example
 
+### Your HTML
+```html 
+<div className="carouflix"></div>
+```
+
 ### Your JavaScript
 ``` JavaScript
 import Carouflix from 'carouflix';
@@ -67,11 +72,7 @@ const config= {
 
 new Carouflix(imageList, config);
 ```
-### Your HTML
-```html 
-<div className="carouflix"></div>
 
-```
 
 # Documentation
 
@@ -116,7 +117,7 @@ If you use default navigation toggle, you can choose between "black" or "white" 
 
 
 Here is the config object structure and default values:
-```
+```Javascript
 const config = {   
     setup: {
         imageStep: number,           //default = 1  

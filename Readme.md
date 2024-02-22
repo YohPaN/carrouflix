@@ -20,16 +20,16 @@ A JavaScript package that provides a fluent infinite slider/carousel. When you r
 `npm install carouflix`
 
 ## Integration
-* Import Carouflix
+* Import Carouflix:
 `import Carouflix from 'carouflix'`
-* Add a "div" element in your DOM with class name "carouflix". This one will determine the slider dimension
+* Add a `<div>` element in your DOM with the class name "carouflix". This  will determine the slider dimensions:
 `<div class="carouflix"></div>`
-* Define a new instance of Carouflix
+* Define a new instance of Carouflix:
 `new Carouflix(...)`
 * Provide an array of image paths and a config object according to the documentation
 
 ## Important  
-The DOM must be fully loaded when you declare instance of Carouflix class. Otherwise, the package will not be able to do its job. For exemple in React, wrap the declaration of the new instance into "useEffet":
+The DOM must be fully loaded when you declare an instance of Carouflix class. Otherwise, the package will not be able to function correctly. For exemple, in React, wrap the declaration of the new instance in `useEffet`:
 ### App.js
 ``` JavaScript
 let [loading, setLoading] = useState(true)
@@ -77,43 +77,44 @@ new Carouflix(imageList, config);
 # Documentation
 
 ## Array of picture paths
-It must be an array that contain only string, representing pictures path into your folders. The leftmost image display will be the first in the array.  
-**Tips**: you can use fs and path from node.js to build your picture paths array.
+It must be an array containing only strings, representing pictures path in your folders. The leftmost image displayed will be the first in the array.  
+**Tips**: you can use `fs` and `path` from node.js to build your picture paths array.
 
 ## Configuration  
 
-You can configure many things with config object.
-There is two type of configuration, "setup" and "style" that are handle by their own object into the config object.
+You can configure many things with the config object.
+There are two types of configuration:  
+"setup" and "style", each handled by their own object within the config object.
 
 ### Setup
 This one define the slider behavior.  
 - **imageStep:**  
-Define the scrolling step in number of images.  
+Define the scrolling step in the number of images.  
 
 - **transitionTime:**  
-Define the slidding time in seconde.  
+Define the sliding time in seconde.  
 
 - **imageDisplayed:**  
-Define the number of image displayed.  
+Define the number of images displayed.  
 
 - **stopOnLastPicture:**  
-Stop the slider on the last image if it's true.  
+Stop the slider on the last image if true.  
 - **aWraper:**  
-Configure image to receive "a" element if it's true. You need to define an array of href for each images.  
+Configure image to receive an "a" element if true. You need to define an array of href for each images.  
 
 ### Style
 This is for styling your slider.
 - **backgroundColor:**  
-Set the background color of the slider. Its support all CSS \<color> (RGB, Hexadecimal, HSL, ect...).
+Set the background color of the slider. Its support all CSS `<color>` (RGB, Hexadecimal, HSL, ect...).
 
 - **useDefaultnavigationToggle:**  
-Let you choose your own logo for navigation toggle if it's false. Then, with CSS selectors and [CSS values](#css-values), you can append your navigation toggle into "navigation-toggle" class.
+Let you choose your logo for navigation toggle if false. Then, with CSS selectors and [CSS values](#css-values), you can append your navigation toggle to the "navigation-toggle" class.
 
 - **navigationToggleSize:**  
-You can choose between three navigation toggle size: sm, md, xl.
+Choose between three navigation toggle sizes: sm, md, xl.
 
 - **color:**  
-If you use default navigation toggle, you can choose between "black" or "white" color.
+If you use the default navigation toggle, you can choose between "black" or "white" color.
 
 
 Here is the config object structure and default values:
@@ -136,8 +137,8 @@ const config = {
 ```
 
 ## Styling
-Like said in [Integration](#integration) part, the div with class name "carouflix" will determine the width and height of the slider.
-By default, each pictures will take 100% of the height of the slider.
+As mentioned in [Integration](#integration) part, the `div` with the class name "carouflix" will determine the width and height of the slider.
+By default, each picture will take 100% of the height of the slider.
 
 ### CSS values
 There is some CSS values to let you modify as you will.
@@ -148,4 +149,4 @@ There is some CSS values to let you modify as you will.
 It contain "a" element if "config.setup.aWraper" is true or directly the "img" element if it's false  
 
 * "a" => contain the image
-* "img" => for exemple, use ".carouflix img {...}" to modify your images
+* "img" => for example, use ".carouflix img {...}" to modify your images

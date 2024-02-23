@@ -8,6 +8,7 @@ A JavaScript package that provides a fluent infinite slider/carousel. When you r
     * [Important](#important)
     * [Code example](#code-example)
 * [Documentation](#documentation)
+    * [HTML element](#html-element)
     * [Array of picture pacths](#array-of-picture-paths)
     * [Configuration](#configuration)
     * [Styling](#styling)
@@ -22,13 +23,14 @@ A JavaScript package that provides a fluent infinite slider/carousel. When you r
 ## Integration
 * Import Carouflix:
 `import Carouflix from 'carouflix'`
-* Add a `<div>` element in your DOM with the class name "carouflix". The parent node in your DOM will determine the slider dimensions:
+* Determine a HTML element that will handle the slider. It will determine the slider dimensions:
 ```html
-<div class="carouflix"></div>
+<div class="slider-container"></div>
 ```
+* Get your HTMLElement with a `getElementById` or `getElementsByClassName`
 * Define a new instance of Carouflix:
 `new Carouflix(...)`
-* Provide an array of image paths and a config object according to the documentation
+* Provide the HTML element, an array of image paths and a config object according to the documentation
 
 ## Important  
 The DOM must be fully loaded when you declare an instance of Carouflix class. Otherwise, the package will not be able to function correctly. For exemple, in React, wrap the declaration of the new instance in `useEffet`:
@@ -47,7 +49,7 @@ let [loading, setLoading] = useState(true)
 
 ### Your HTML
 ```html 
-<div className="carouflix"></div>
+<div class="slider-container"></div>
 ```
 
 ### Your JavaScript
@@ -72,11 +74,17 @@ const config= {
     },
 }
 
-new Carouflix(imageList, config);
+const sliderContainer = document.getElementsByClassName('slider-container');
+
+new Carouflix(sliderContainer, imageList, config);
 ```
 
 
 # Documentation
+
+## HTML element
+It must be a valid element that will contain the slider. Its dimensions will determine the size of the slider.  
+**Tips:** You can add an `id="..."` to your element if you want only one slider, or you can add a `class="..."` to all HTML elements that will contain a slider. Then, loop over the HTMLCollection and instantiate a Carouflix class on each iteration. 
 
 ## Array of picture paths
 It must be an array containing only strings, representing pictures path in your folders. The leftmost image displayed will be the first in the array.  

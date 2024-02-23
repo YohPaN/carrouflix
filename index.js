@@ -11,7 +11,7 @@ class Carouflix {
         },
         style: {
             backgroundColor: 'transparent',
-            useDefaultnavigationToggle: true,
+            useDefaultNavigationToggle: true,
             navigationToggleSize: 'md',
             color: 'white',
         },
@@ -34,9 +34,8 @@ class Carouflix {
      * @param {Array} dataSet 
      * @param {Object} config 
      */
-    constructor(dataSet, config, dataSetHref) {
-        const container = document.getElementsByClassName('carouflix')[0];
-        this.inputValidation(dataSet, config, dataSetHref, container);
+    constructor(container, dataSet, config, dataSetHref) {
+        this.inputValidation(container, dataSet, config, dataSetHref);
 
         this.config.setup = {...this.config.setup, ...config.setup};
         this.config.style = {...this.config.style, ...config.style};
@@ -93,11 +92,20 @@ class Carouflix {
      * @param {Array} dataSetHref
      * @param {HTMLElement} container  
      */
-    inputValidation(dataSet, config, dataSetHref, container) {
+    inputValidation(container, dataSet, config, dataSetHref) {
 
         if(container === undefined) {
-            throw new Error('You need to define a "div" element with the class name "carouflix" and wait for the DOM was fully load')
+            throw new Error('You need to define a HTML element and wait for the DOM was fully load')
         }
+
+        const testContainer = container;
+        const testInsert = document.createElement('div');
+        try {
+            testContainer.append(testInsert);
+        } catch (error) {
+            throw new Error('You need to provide a valid HTML element')
+        }
+
 
         if(config === undefined) {
             throw new Error('You need to provide an array of image paths and a config object, even if config object is empty')
@@ -206,9 +214,9 @@ class Carouflix {
                         throw new Error('config.style.color must be a valid CSS <color>');
                     }
                     break;
-                case 'useDefaultnavigationToggle':
-                    if(typeof subConfig['useDefaultnavigationToggle'] != 'boolean') {
-                        throw new TypeError('config.style.useDefaultnavigationToggle must be a Boolean');
+                case 'useDefaultNavigationToggle':
+                    if(typeof subConfig['useDefaultNavigationToggle'] != 'boolean') {
+                        throw new TypeError('config.style.useDefaultNavigationToggle must be a Boolean');
                     }
                     break;
                 case 'navigationToggleSize':
@@ -256,6 +264,10 @@ class Carouflix {
         button.addEventListener('click', () => {
             this.goTo(listnerValue)
         });
+
+        if(this.config.style.useDefaultNavigationToggle) {
+            button.classList.add(`${direction}-navigation-toggle-logo`)
+        }
 
         return button;
     }

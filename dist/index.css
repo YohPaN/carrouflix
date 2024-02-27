@@ -1,0 +1,73 @@
+/* src/style.css */
+.carouflix {
+  overflow: hidden;
+  position: relative;
+  background-color: var(--carouflix-background-color);
+  padding-top: 5px;
+  padding-bottom: 5px;
+  height: 100%;
+  width: 100%;
+}
+.navigation-toggle {
+  position: absolute;
+  height: 100%;
+  width: var(--navigation-toggle-size);
+  z-index: 11;
+  border: none;
+  padding: 0;
+  background-color: transparent;
+  color: var(--color);
+  font-size: 2.5vw;
+  vertical-align: middle;
+}
+#left-navigation-toggle {
+  left: 0;
+}
+.left-navigation-toggle-logo {
+  &:before {
+    content: "\3008";
+  }
+}
+#right-navigation-toggle {
+  right: 0;
+}
+.right-navigation-toggle-logo {
+  &:before {
+    content: "\3009";
+  }
+}
+.slider {
+  position: relative;
+  left: var(--slider-left);
+  width: var(--slider-width);
+  height: 100%;
+}
+.item {
+  width: var(--item-width);
+  height: 100%;
+  position: absolute;
+  transition: left var(--transition-time), right var(--transition-time);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  & a {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  & img {
+    max-height: 100%;
+    max-width: 90%;
+  }
+}
+:root {
+  --transition-time: 0.5s;
+  --item-width: 9vw;
+  --slider-width: 100vw;
+  --slider-left: 30vw;
+  --carouflix-background-color: transparent;
+  --navigation-toggle-size: 30px;
+  --color: "#fff";
+}
+/*# sourceMappingURL=index.css.map */

@@ -14,7 +14,22 @@
     "url": "https://github.com/YohPaN/carrouflix/issues"
   },
   "homepage": "https://github.com/YohPaN/carrouflix",
-  "main": "index.js",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
   "author": "Yohan PAYA",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "ts-node": "^10.9.2",
+    "tsup": "^8.0.2"
+  },
+  "dependencies": {
+    "@types/node": "^20.11.20"
+  },
+  "scripts": {
+    "build": "tsup"
+  }
 }

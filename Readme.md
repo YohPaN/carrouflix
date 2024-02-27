@@ -33,7 +33,7 @@ A JavaScript package that provides a fluent infinite slider/carousel. When you r
 * Provide the HTML element, an array of image paths and a config object according to the documentation
 
 ## Important  
-The DOM must be fully loaded when you declare an instance of Carouflix class. Otherwise, the package will not be able to function correctly. For exemple, in React, wrap the declaration of the new instance in `useEffet`:
+* The DOM must be fully loaded when you declare an instance of Carouflix class. Otherwise, the package will not be able to function correctly. For exemple, in React, wrap the declaration of the new instance in `useEffet`:
 ### App.js
 ``` JavaScript
 let [loading, setLoading] = useState(true)
@@ -44,6 +44,7 @@ let [loading, setLoading] = useState(true)
     return () => loading = false;
   }, []);
 ```
+* With Angular, you need to add the package stylesheet in angular.json that is at the root of your project.
 
 ## Code example
 

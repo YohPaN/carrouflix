@@ -1,6 +1,6 @@
 {
   "name": "carouflix",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A JavaScript package that provides a fluent infinite slider/carousel. When you reach the end of the slider, it will restart from the beginning, and you will see nothing.",
   "repository": {
     "type": "git",
